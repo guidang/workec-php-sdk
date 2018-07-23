@@ -11,6 +11,7 @@ class Workec {
     
     //客户
     const CUSTOMER_ADDCUSTOMER = '/customer/addCustomer'; //创建客户
+    const CUSTOMER_RANGEQUERYCUSTOMER = '/customer/rangeQueryCustomer'; //根据条件分页查询客户
     const CUSTOMER_DELCRMS = '/customer/delcrms'; //获取删除的客户
     const CUSTOMER_ABANDON = '/customer/abandon'; //放弃客户
     const CUSTOMER_CHANGECRMFOLLOWUSER = '/customer/changeCrmFollowUser'; //变更客户跟进人
@@ -347,6 +348,31 @@ class Workec {
     }    
 
     /**
+     * 根据条件分页查询客户
+     * @param array $data
+     * @return boolean
+     */
+    public function rangeQueryCustomer($data) {
+        if (!$this->access_token && !$this->checkAuth()) return false;
+
+        $this->setHeader();
+        
+        $result = $this->http_post(self::API_BASE_URL_PREFIX . self::CUSTOMER_RANGEQUERYCUSTOMER, self::json_encode($data));
+        if ($result) {
+            if (is_string($result)) {
+                $json = json_decode($result, true);
+                if (!$json || ($json['errCode'] != 200)) {
+                    $this->errCode = $json['errCode'];
+                    $this->errMsg = $json['errMsg'];
+                    return false;
+                }
+            }
+            return $result;
+        }
+        return false;
+    }
+
+    /**
      * 添加客户
      * @param array $data
      * @return boolean
@@ -374,7 +400,7 @@ class Workec {
      * @param array $data
      * @return boolean
      */
-    public function customerChangeCrmFollowUser($data) {
+    public function changeCrmFollowUser($data) {
         if (!$this->access_token && !$this->checkAuth()) return false;
 
         $this->setHeader();
