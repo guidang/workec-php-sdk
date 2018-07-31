@@ -25,6 +25,9 @@ class Workec {
     private $headers = [];
     private $access_token;
 
+    public $errCode = -1;
+    public $errMsg = '未知错误';
+
     public function __construct($options) {
         $this->token = isset($options['token']) ? $options['token'] : '';
         $this->corpid = isset($options['corpid']) ? $options['corpid'] : '';
